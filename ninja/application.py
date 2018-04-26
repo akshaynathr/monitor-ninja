@@ -4,6 +4,7 @@ from flask import jsonify
 
 app = Flask(__name__)
 
+mem=[]
 @app.route('/home')
 def home():
     return "Welcome to Monitor ninja"
@@ -11,8 +12,16 @@ def home():
 
 @app.route('/process1',methods=['GET','POST'])
 def process():
-    data = request.data
-    date = str(datetime.datetime.now())
-    result = { "data": data, "date":str(date) }
-    result= jsonify(result)
-    return render_template('process.html', name=result)
+    global mem
+    if request.method=='GET':
+        print mem
+        return mem[-1]
+    else:
+        data = request.data
+        date = str(datetime.datetime.now())
+        result = { "data": data, "date":str(date) }
+        result= jsonify(result)
+        print result
+        mem.append(result)
+        print mem[-1]
+        return result
